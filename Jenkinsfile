@@ -7,7 +7,6 @@ pipeline {
         registryCreds = 'ecr:us-east-1:awscreds'
         cluster = "aminemastouri"
         service = "aminemastouri-svc"
-        
         region = 'us-east-1'
     }
 
