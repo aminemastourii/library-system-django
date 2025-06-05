@@ -20,6 +20,7 @@ pipeline {
             }
             steps {
                 script {
+                    
                     sh 'docker ps'
                 }
             }
