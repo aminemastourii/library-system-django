@@ -26,21 +26,21 @@ pipeline {
             }
         }
 
-        // stage('Build Docker Image') {
-        //     agent {
-        //         docker {
-        //             image 'docker:latest'
-        //             args '-v /var/run/docker.sock:/var/run/docker.sock'  // Mount Docker socket
-        //         }
-        //     }
-        //     steps {
-        //         script {
-        //             echo 'Building Docker Image from Dockerfile...'
-        //             sh 'mkdir -p /tmp/.docker'  // Ensure the directory exists
-        //             dockerImage = docker.build(repoUri + ":$BUILD_NUMBER")
-        //         }
-        //     }
-        // }
+        stage('Build Docker Image') {
+            agent {
+                docker {
+                    image 'docker:latest'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'  // Mount Docker socket
+                }
+            }
+            steps {
+                script {
+                    echo 'Building Docker Image from Dockerfile...'
+                    sh 'mkdir -p /tmp/.docker'  // Ensure the directory exists
+                    dockerImage = docker.build(repoUri + ":$BUILD_NUMBER")
+                }
+            }
+        }
 
         // stage('Push Docker Image to ECR') {
         //     agent {
