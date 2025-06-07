@@ -36,10 +36,14 @@ pipeline {
             script {
                 echo "Installing dependencies and running tests..."
                 sh '''
-                    pip install --user -r requirements.txt
-                    pip install --user pytest
-                    export PATH=$PATH:$HOME/.local/bin
+                    python3 -m venv venv
+                     . venv/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                    pip install pytest pytest-django
                     pytest
+                    deactivate
+                    rm -rf venv
                 '''
             }
         }
