@@ -61,5 +61,21 @@ pipeline {
             }
         }
 
+        stage('Deploy to ECS') {
+            agent {
+                docker {
+                    image 'amazon/aws-cli:latest'  // Use a pre-built AWS CLI Docker image for ECS deployment
+                    args '-v /var/run/docker.sock:/var/run/docker.sock --entrypoint=""'  // Optional if needed by AWS CLI
+                }
+            }
+            steps {
+                script {
+                    echo "Deploying Image to ECS..."
+                    withAWS(credentials: 'awscreds', region: "${region}") {
+                        sh 'aws ecs update-service --cluster ${cluster} --service ${service} --force-new-deployment'
+                    }
+                }
+            }
+        }
     }
 }
