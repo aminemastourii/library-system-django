@@ -48,34 +48,35 @@ pipeline {
                     }
                 }
             }
-        stage('SonarQube Analysis') {
-                agent {
-                    docker {
-                        image 'sonarsource/sonar-scanner-cli:latest'
-                        args '-u root -v $WORKSPACE:/usr/src -v $WORKSPACE/.sonar_cache:/opt/sonar-scanner/.sonar'
+        // stage('SonarQube Analysis') {
+        //         agent {
+        //             docker {
+        //                 image 'sonarsource/sonar-scanner-cli:latest'
+        //                 args '-u root -v $WORKSPACE:/usr/src -v $WORKSPACE/.sonar_cache:/opt/sonar-scanner/.sonar'
 
-                    }
-                }
-                environment {
-                    SONAR_HOST_URL = 'https://sonarcloud.io'
-                    scannerHome= tool 'sonnar-scanner'
+        //             }
+        //         }
+        //         environment {
+        //             SONAR_HOST_URL = 'https://sonarcloud.io'
+        //             scannerHome= tool 'sonnar-scanner'
 
-                }
-                steps {
-                    withSonarQubeEnv('sonar-server') {
-                        sh '''
-                            ${scannerHome}/bin/sonar-scanner \
-                                -Dsonar.projectKey=librarysys \
-                                -Dsonar.organization=am-org \
-                                -Dsonar.exclusions=**/*.js,**/*.ts
-                                -Dsonar.sources=. \
-                                -Dsonar.language=py \
-                                -Dsonar.host.url=$SONAR_HOST_URL \
-                                -Dsonar.login=$SONAR_AUTH_TOKEN
-                        '''
-                    }
-                }
-            }
+        //         }
+        //         steps {
+        //             withSonarQubeEnv('sonar-server') {
+        //                 sh '''
+        //                     ${scannerHome}/bin/sonar-scanner \
+        //                         -Dsonar.projectKey=librarysys \
+        //                         -Dsonar.organization=am-org \
+        //                         -Dsonar.exclusions=**/*.js,**/*.ts
+        //                         -Dsonar.sources=. \
+        //                         -Dsonar.language=py \
+        //                         -Dsonar.host.url=$SONAR_HOST_URL \
+        //                         -Dsonar.login=$SONAR_AUTH_TOKEN
+        //                 '''
+
+        //             }
+        //         }
+        //     }
 
         stage('Build Docker Image') {
             agent {
