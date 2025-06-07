@@ -58,13 +58,13 @@ pipeline {
                 }
                 environment {
                     SONAR_HOST_URL = 'https://sonarcloud.io'
+                    scannerHome= tool 'sonnar-scanner'
+
                 }
                 steps {
                     withSonarQubeEnv('sonar-server') {
                         sh '''
-                            apk add --no-cache nodejs npm || apt-get install -y nodejs npm || true
-
-                            sonar-scanner \
+                            ${scannerHome}/bin/sonar-scanner \
                                 -Dsonar.projectKey=librarysys \
                                 -Dsonar.organization=am-org \
                                 -Dsonar.exclusions=**/*.js,**/*.ts
