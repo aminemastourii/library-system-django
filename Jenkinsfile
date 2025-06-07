@@ -64,7 +64,7 @@ pipeline {
                         sh '''
                             sonar-scanner \
                                 -Dsonar.projectKey=librarysys \
-                                -Dsonar.organization=librarysys-org \
+                                -Dsonar.organization=am-org \
                                 -Dsonar.sources=. \
                                 -Dsonar.language=py \
                                 -Dsonar.python.coverage.reportPaths=coverage.xml \
