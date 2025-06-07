@@ -27,27 +27,53 @@ pipeline {
             }
         }
         stage('Run Unit Tests') {
-        agent {
-            docker {
-                image 'python:3.10'
-            }
-        }
-        steps {
-            script {
-                echo "Installing dependencies and running tests..."
-                sh '''
-                    python3 -m venv venv
-                     . venv/bin/activate
-                    pip install --upgrade pip
-                    pip install -r requirements.txt
-                    python manage.py test
+                agent {
+                    docker {
+                        image 'python:3.10'
+                    }
+                }
+                steps {
+                    script {
+                        echo "Installing dependencies and running tests..."
+                        sh '''
+                            python3 -m venv venv
+                            . venv/bin/activate
+                            pip install --upgrade pip
+                            pip install -r requirements.txt
+                            python manage.py test
 
-                    deactivate
-                    rm -rf venv
-                '''
+                            deactivate
+                            rm -rf venv
+                        '''
+                    }
+                }
             }
-        }
-    }
+        stage('SonarQube Analysis') {
+                agent {
+                    docker {
+                        image 'sonarsource/sonar-scanner-cli:latest'
+                        args '-v $WORKSPACE:/usr/src'  // Mount Jenkins workspace inside container
+
+                    }
+                }
+                environment {
+                    SONAR_HOST_URL = 'https://sonarcloud.io'
+                }
+                steps {
+                    withSonarQubeEnv('sonar-server') {
+                        sh '''
+                            sonar-scanner \
+                                -Dsonar.projectKey=librarysys \
+                                -Dsonar.organization=librarysys-org \
+                                -Dsonar.sources=. \
+                                -Dsonar.language=py \
+                                -Dsonar.python.coverage.reportPaths=coverage.xml \
+                                -Dsonar.host.url=$SONAR_HOST_URL \
+                                -Dsonar.login=$SONAR_AUTH_TOKEN
+                        '''
+                    }
+                }
+            }
 
         stage('Build Docker Image') {
             agent {
