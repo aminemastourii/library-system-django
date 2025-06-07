@@ -27,22 +27,23 @@ pipeline {
             }
         }
         stage('Run Unit Tests') {
-            agent {
-                docker {
-                    image 'python:3.10'
-                }
-            }
-            steps {
-                script {
-                    echo "Installing dependencies and running tests..."
-                    sh '''
-                        pip install --upgrade pip
-                        pip install -r requirements.txt
-                        pytest
-                    '''
-                }
+        agent {
+            docker {
+                image 'python:3.10'
             }
         }
+        steps {
+            script {
+                echo "Installing dependencies and running tests..."
+                sh '''
+                    pip install --user -r requirements.txt
+                    pip install --user pytest
+                    export PATH=$PATH:$HOME/.local/bin
+                    pytest
+                '''
+            }
+        }
+    }
 
         stage('Build Docker Image') {
             agent {
