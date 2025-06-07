@@ -62,12 +62,14 @@ pipeline {
                 steps {
                     withSonarQubeEnv('sonar-server') {
                         sh '''
+                            apk add --no-cache nodejs npm || apt-get install -y nodejs npm || true
+
                             sonar-scanner \
                                 -Dsonar.projectKey=librarysys \
                                 -Dsonar.organization=am-org \
+                                -Dsonar.exclusions=**/*.js,**/*.ts
                                 -Dsonar.sources=. \
                                 -Dsonar.language=py \
-                                -Dsonar.python.coverage.reportPaths=coverage.xml \
                                 -Dsonar.host.url=$SONAR_HOST_URL \
                                 -Dsonar.login=$SONAR_AUTH_TOKEN
                         '''
