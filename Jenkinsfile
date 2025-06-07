@@ -52,7 +52,7 @@ pipeline {
                 agent {
                     docker {
                         image 'sonarsource/sonar-scanner-cli:latest'
-                        args '-v $WORKSPACE:/usr/src'  // Mount Jenkins workspace inside container
+                        args '-v $WORKSPACE:/usr/src -v $WORKSPACE/.sonar_cache:/opt/sonar-scanner/.sonar'
 
                     }
                 }
