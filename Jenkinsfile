@@ -23,6 +23,7 @@ pipeline {
                 script {
 
                     sh 'docker ps'
+                    cleanWs()
                 }
             }
         }
@@ -48,39 +49,11 @@ pipeline {
                     }
                 }
             }
-        // stage('SonarQube Analysis') {
-        //         agent {
-        //             docker {
-        //                 image 'sonarsource/sonar-scanner-cli:latest'
-        //                 args '-u root -v $WORKSPACE:/usr/src -v $WORKSPACE/.sonar_cache:/opt/sonar-scanner/.sonar'
-
-        //             }
-        //         }
-        //         environment {
-        //             SONAR_HOST_URL = 'https://sonarcloud.io'
-        //             scannerHome= tool 'sonnar-scanner'
-
-        //         }
-        //         steps {
-        //             withSonarQubeEnv('sonar-server') {
-        //                 sh '''
-        //                     ${scannerHome}/bin/sonar-scanner \
-        //                         -Dsonar.projectKey=librarysys \
-        //                         -Dsonar.organization=am-org \
-        //                         -Dsonar.exclusions=**/*.js,**/*.ts
-        //                         -Dsonar.sources=. \
-        //                         -Dsonar.language=py \
-        //                         -Dsonar.host.url=$SONAR_HOST_URL \
-        //                         -Dsonar.login=$SONAR_AUTH_TOKEN
-        //                 '''
-
-        //             }
-        //         }
-        //     }
+        
 
         stage('Build Docker Image') {
             agent {
-                
+
                 docker {
                     image 'docker:latest'
                     args '-v /var/run/docker.sock:/var/run/docker.sock'  // Mount Docker socket
