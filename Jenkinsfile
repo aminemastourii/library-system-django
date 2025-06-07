@@ -6,7 +6,7 @@ pipeline {
         repoRegistryUrl = "https://615299749113.dkr.ecr.us-east-1.amazonaws.com"
         registryCreds = 'ecr:us-east-1:awscreds'
         cluster = "aminemastouri"
-        service = "aminemastouri-svc"
+        service = "librarysys-task-service-caitjd4g"
         region = 'us-east-1'
     }
 
