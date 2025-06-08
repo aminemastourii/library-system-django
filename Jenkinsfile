@@ -50,7 +50,8 @@ pipeline {
                 }
             }
         
-        stage('Code Analysis SonarQube') {
+        stage('Code Analysis "SonarQube') {
+            agent any
             environment {
                 scannerHome = tool 'sonnar-scanner' // or your configured scanner name
             }
@@ -67,7 +68,8 @@ pipeline {
                     -Dsonar.organization=am-org'''
                 }
             }
-            }
+
+        }
 
         stage('Build Docker Image') {
             agent {
