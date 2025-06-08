@@ -50,6 +50,24 @@ pipeline {
                 }
             }
         
+        stage('Code Analysis SonarQube') {
+            environment {
+                scannerHome = tool 'sonnar-scanner' // or your configured scanner name
+            }
+            steps {
+                withSonarQubeEnv('sonar-server') {
+                sh '''${scannerHome}/bin/sonar-scanner \
+                    -Dsonar.projectKey=librarysys \
+                    -Dsonar.projectName=librarysys \
+                    -Dsonar.projectVersion=1.0 \
+                    -Dsonar.sources=. \
+                    -Dsonar.language=python \
+                    -Dsonar.sourceEncoding=UTF-8 \
+                    -Dsonar.python.version=3.10 \
+                    -Dsonar.organization=am-org'''
+                }
+            }
+            }
 
         stage('Build Docker Image') {
             agent {
